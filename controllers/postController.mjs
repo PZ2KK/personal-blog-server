@@ -1,4 +1,4 @@
-import connectionPool from "../utils/db.mjs";
+import connectDb from "../utils/db.mjs";
 
 // POST --- add new post 
 export const createPost = async (req, res) => {
@@ -19,7 +19,7 @@ export const createPost = async (req, res) => {
       newPost.status_id,
     ];
 
-    await connectionPool.query(query, values);
+    await connectDb.query(query, values);
     return res.status(201).json({ message: "Created post successfully" });
 
   } catch(err) {
@@ -71,7 +71,7 @@ export const getAllPosts = async (req, res) => {
     query += ` ORDER BY posts.date DESC LIMIT $${values.length + 1} OFFSET $${values.length + 2}`;
     values.push(safeLimit, offset);
 
-    const result = await connectionPool.query(query, values);
+    const result = await connectDb.query(query, values);
 
     //---------------------------- pagination ----------------------------
     let countQuery = 
@@ -98,7 +98,7 @@ export const getAllPosts = async (req, res) => {
       `;
     }
 
-    const countResult = await connectionPool.query(countQuery, countValues);
+    const countResult = await connectDb.query(countQuery, countValues);
     const totalPosts = parseInt(countResult.rows[0].count, 10);
 
     const results = {
@@ -129,7 +129,7 @@ export const getPostById = async (req, res) => {
   const postId = req.params.postId;
 
   try {
-    const result = await connectionPool.query(
+    const result = await connectDb.query(
       `
       SELECT posts.id, posts.image, categories.name AS category, posts.title, posts.description, posts.date, posts.content, statuses.status, posts.likes_count
       FROM posts
@@ -159,7 +159,7 @@ export const updatePost = async (req, res) => {
   const updatedPost = { ...req.body, date: new Date() };
 
   try {
-    const result = await connectionPool.query(
+    const result = await connectDb.query(
       `
       UPDATE posts
       SET title = $2, image = $3, category_id = $4, description = $5, content = $6, status_id = $7, date = $8
@@ -195,7 +195,7 @@ export const deletePost = async (req, res) => {
   const postId = req.params.postId;
 
   try {
-    const result = await connectionPool.query(
+    const result = await connectDb.query(
       `DELETE FROM posts WHERE id = $1`,
       [postId]
     );

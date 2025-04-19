@@ -1,9 +1,19 @@
 import * as pg from "pg";
 const { Pool } = pg.default;
  
-const connectionPool = new Pool({
+const pool = new Pool({
    connectionString:
      "postgresql://neondb_owner:npg_S0fj7tymNJcE@ep-long-dew-a1h73fsb-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require",
 });
+
+const connectDb = async () => {
+  try {
+    const client = await pool.connect();
+    console.log("✅ Connect to the database");
+    client.release();
+  } catch (error) {
+    console.error("❌ Database connection failed:", error);
+  }
+};
  
- export default connectionPool;
+ export default connectDb;
