@@ -1,14 +1,14 @@
 import * as pg from "pg";
 const { Pool } = pg.default;
  
-const pool = new Pool({
+const connectionPool = new Pool({
    connectionString:
      "postgresql://neondb_owner:npg_S0fj7tymNJcE@ep-long-dew-a1h73fsb-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require",
 });
 
 const connectDb = async () => {
   try {
-    const client = await pool.connect();
+    const client = await connectionPool.connect();
     console.log("✅ Connect to the database");
     client.release();
   } catch (error) {
@@ -16,4 +16,4 @@ const connectDb = async () => {
   }
 };
  
- export default connectDb;
+export { connectDb, connectionPool };

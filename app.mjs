@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import postRouter from "./routes/postRouter.mjs";
 import morgan from "morgan";
-import connectDb from "./utils/db.mjs";
+import { connectDb } from "./utils/db.mjs";
  
 const app = express();
 const port = process.env.PORT || 4001;
